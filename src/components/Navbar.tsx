@@ -55,8 +55,8 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Main Navbar Wrapper - Hidden on mobile */}
-      <div className="fixed top-0 left-0 right-0 z-50 justify-center pointer-events-none hidden md:flex">
+      {/* Main Navbar Wrapper - Desktop only */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
         <motion.nav
           initial={false}
           animate={{

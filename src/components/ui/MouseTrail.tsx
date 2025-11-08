@@ -81,11 +81,14 @@ const MouseTrail = ({
   }, [colors]);
 
   useEffect(() => {
-    // Setup custom Figma-like cursor
-    if (enableCustomCursor) {
-      // Add global style to hide default cursor
+    // Check if device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    
+    // Setup custom Figma-like cursor (desktop only)
+    if (enableCustomCursor && !isMobile) {
+      // Add global style to hide default cursor on desktop only
       const styleEl = document.createElement('style');
-      styleEl.innerHTML = '* { cursor: none !important; }';
+      styleEl.innerHTML = '@media (min-width: 768px) { * { cursor: none !important; } }';
       document.head.appendChild(styleEl);
       styleElRef.current = styleEl;
 
@@ -97,6 +100,7 @@ const MouseTrail = ({
       cursor.style.width = '24px';
       cursor.style.height = '24px';
       cursor.style.transform = 'translate(-50%, -50%)';
+      cursor.style.display = 'none'; // Hide by default
 
       const updateCursor = () => {
         const isDarkMode = document.documentElement.classList.contains('dark');
@@ -127,6 +131,12 @@ const MouseTrail = ({
       
       // Store observer for cleanup
       (cursor as any)._observer = observer;
+      
+      // Show cursor on mouse move (desktop)
+      const showCursor = () => {
+        cursor.style.display = 'block';
+      };
+      document.addEventListener('mousemove', showCursor, { once: true });
     }
 
     const container = containerRef.current;
@@ -285,24 +295,67 @@ const MouseTrail = ({
     resize();
 
     const mouse = new Vec3();
+    
+    // Touch ripple animation for mobile
+    function createTouchRipple(clientX: number, clientY: number) {
+      const ripple = document.createElement('div');
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      
+      ripple.style.position = 'fixed';
+      ripple.style.left = `${clientX}px`;
+      ripple.style.top = `${clientY}px`;
+      ripple.style.width = '20px';
+      ripple.style.height = '20px';
+      ripple.style.borderRadius = '50%';
+      ripple.style.border = `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}`;
+      ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+      ripple.style.pointerEvents = 'none';
+      ripple.style.zIndex = '999998';
+      ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+      ripple.style.opacity = '1';
+      
+      document.body.appendChild(ripple);
+      
+      // Trigger animation
+      requestAnimationFrame(() => {
+        ripple.style.transform = 'translate(-50%, -50%) scale(4)';
+        ripple.style.opacity = '0';
+      });
+      
+      // Remove after animation
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    }
+    
     function updateMouse(e: MouseEvent | TouchEvent) {
       if (!container) return;
       let x: number, y: number;
+      let clientX: number, clientY: number;
       const rect = container.getBoundingClientRect();
+      
       if ('changedTouches' in e && e.changedTouches && e.changedTouches.length) {
-        x = e.changedTouches[0].clientX - rect.left;
-        y = e.changedTouches[0].clientY - rect.top;
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+        x = clientX - rect.left;
+        y = clientY - rect.top;
+        
+        // Create touch ripple on mobile
+        if (isMobile && e.type === 'touchstart') {
+          createTouchRipple(clientX, clientY);
+        }
       } else {
         const mouseEvent = e as MouseEvent;
-        x = mouseEvent.clientX - rect.left;
-        y = mouseEvent.clientY - rect.top;
+        clientX = mouseEvent.clientX;
+        clientY = mouseEvent.clientY;
+        x = clientX - rect.left;
+        y = clientY - rect.top;
       }
 
-      // Update custom cursor position
-      if (enableCustomCursor && cursorRef.current) {
-        const mouseEvent = e as MouseEvent;
-        cursorRef.current.style.left = `${mouseEvent.clientX}px`;
-        cursorRef.current.style.top = `${mouseEvent.clientY}px`;
+      // Update custom cursor position (desktop only)
+      if (enableCustomCursor && cursorRef.current && !isMobile) {
+        cursorRef.current.style.left = `${clientX}px`;
+        cursorRef.current.style.top = `${clientY}px`;
       }
 
       const width = container.clientWidth;

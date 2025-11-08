@@ -21,15 +21,21 @@ export default function SquaresBackground({
 }: SquaresBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDark, setIsDark] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Detect theme changes
+  // Detect theme changes and mobile device
   useEffect(() => {
     const checkTheme = () => {
       setIsDark(document.documentElement.classList.contains('dark'));
     };
 
-    // Check initial theme
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check initial theme and device
     checkTheme();
+    checkMobile();
 
     // Watch for theme changes
     const observer = new MutationObserver(checkTheme);
@@ -38,7 +44,13 @@ export default function SquaresBackground({
       attributeFilter: ['class'],
     });
 
-    return () => observer.disconnect();
+    // Watch for resize to update mobile state
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   useEffect(() => {
@@ -68,8 +80,12 @@ export default function SquaresBackground({
     const drawSquares = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const cols = Math.ceil(canvas.width / (squareSize + gridGap));
-      const rows = Math.ceil(canvas.height / (squareSize + gridGap));
+      // Use smaller squares on mobile (30px vs 50px default)
+      const effectiveSquareSize = isMobile ? Math.min(squareSize * 0.6, 30) : squareSize;
+      const effectiveStrokeWidth = isMobile ? strokeWidth * 0.8 : strokeWidth;
+
+      const cols = Math.ceil(canvas.width / (effectiveSquareSize + gridGap));
+      const rows = Math.ceil(canvas.height / (effectiveSquareSize + gridGap));
 
       // Calculate center point for radial fade
       const centerX = canvas.width / 2;
@@ -92,16 +108,16 @@ export default function SquaresBackground({
         }
       }
 
-      ctx.lineWidth = strokeWidth;
+      ctx.lineWidth = effectiveStrokeWidth;
 
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-          const x = i * (squareSize + gridGap);
-          const y = j * (squareSize + gridGap);
+          const x = i * (effectiveSquareSize + gridGap);
+          const y = j * (effectiveSquareSize + gridGap);
           
           // Calculate center of square
-          const squareCenterX = x + squareSize / 2;
-          const squareCenterY = y + squareSize / 2;
+          const squareCenterX = x + effectiveSquareSize / 2;
+          const squareCenterY = y + effectiveSquareSize / 2;
           
           // Calculate distance from center of canvas
           const dx = squareCenterX - centerX;
@@ -166,7 +182,7 @@ export default function SquaresBackground({
           // Set stroke color with calculated opacity
           ctx.strokeStyle = `rgba(${baseRgb}, ${opacity})`;
           
-          ctx.strokeRect(x, y, squareSize, squareSize);
+          ctx.strokeRect(x, y, effectiveSquareSize, effectiveSquareSize);
         }
       }
     };
@@ -185,7 +201,7 @@ export default function SquaresBackground({
       clearTimeout(timeoutId);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [squareSize, gridGap, strokeWidth, maxOpacity, strokeColor, isDark]);
+  }, [squareSize, gridGap, strokeWidth, maxOpacity, strokeColor, isDark, isMobile]);
 
   return (
     <canvas
