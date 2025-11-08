@@ -34,7 +34,7 @@ export const MobileNav = ({ className = '' }: MobileNavProps) => {
   return (
     <div className={`fixed top-10 left-1/2 transform -translate-x-1/2 z-50 ${className}`}>
       <MotionDiv
-        className="flex items-center justify-between gap-6 px-6! py-3! rounded-full shadow-lg min-w-[300px]"
+        className="flex items-center justify-between gap-6 px-6! py-3! rounded-full shadow-lg min-w-[350px]"
         initial={{ y: -100, opacity: 0 }}
         animate={{ 
           y: 0, 
