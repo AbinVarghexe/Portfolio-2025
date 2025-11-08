@@ -1,0 +1,377 @@
+@import "tailwindcss";
+
+/* ================================
+   Local Font Declarations
+   ================================ */
+
+@font-face {
+  font-family: 'Vina';
+  src: url('/fonts/vina.woff2') format('woff2'),
+       url('/fonts/vina.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ================================
+   Design System Variables (Figma)
+   ================================ */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #0b0b0c;
+  --color-blue: #0020d7;
+  --color-indigo: #0e0e2c;
+  --color-white-main: #fafcfe;
+  
+  /* Text Colors */
+  --color-text-body: #4a4a68;
+  --color-text-secondary: #323232;
+  --color-text-muted: #c1c1c1;
+  
+  /* Background Colors */
+  --color-bg-main: #ececec;
+  --color-bg-card: #e1e1e1;
+  --color-bg-secondary: #e4e3e3;
+  --color-bg-tertiary: #d9d9d9;
+  --color-bg-accent: #d8d8d8;
+  
+  /* Border Colors */
+  --color-border-primary: #aaaaaa;
+  --color-border-secondary: #b4b4b4;
+  --color-border-tertiary: #a4a4a4;
+  --color-border-light: #c2c2c2;
+  --color-border-medium: #9b9b9b;
+  --color-border-dark: #929292;
+  --color-border-card: #c4c4c4;
+  
+  /* Gradient Colors */
+  --gradient-blue: linear-gradient(180deg, #7da3f6 0%, #0020d7 100%);
+  --gradient-gray: linear-gradient(180deg, #484848 0%, #333333 100%);
+  --gradient-text: linear-gradient(180deg, #3c3c3c 0%, #323232 100%);
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Spacing Scale */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-2xl: 50px;
+  --spacing-3xl: 70px;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 15px;
+  --radius-lg: 25px;
+  --radius-xl: 33px;
+  --radius-2xl: 53.5px;
+  --radius-full: 88.583px;
+  
+  /* Shadows */
+  --shadow-card: 5px 7px 32.3px 0px rgba(0, 0, 0, 0.5);
+  
+  /* Transitions */
+  --transition-fast: 200ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Font Families */
+  --font-display: var(--font-vina), 'Vina', sans-serif;
+  --font-sans: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-main: #0a0a0a;
+    --color-bg-card: #1a1a1a;
+    --color-bg-secondary: #2a2a2a;
+    --color-text-body: #a8a8c8;
+    --color-text-secondary: #cdcdcd;
+  }
+}
+
+/* ================================
+   Tailwind Theme Configuration
+   ================================ */
+
+@theme inline {
+  /* Colors */
+  --color-primary: var(--color-primary);
+  --color-blue: var(--color-blue);
+  --color-indigo: var(--color-indigo);
+  --color-white-main: var(--color-white-main);
+  --color-text-body: var(--color-text-body);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-bg-main: var(--color-bg-main);
+  --color-bg-card: var(--color-bg-card);
+  --color-bg-secondary: var(--color-bg-secondary);
+  --color-bg-tertiary: var(--color-bg-tertiary);
+  
+  /* Fonts */
+  --font-display: 'Vina', sans-serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ================================
+   Typography Base Styles
+   ================================ */
+
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-regular);
+  background: var(--color-bg-main);
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Heading Styles */
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-indigo);
+}
+
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-indigo);
+}
+
+h3, .h3 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  color: #000000;
+}
+
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  color: #000000;
+}
+
+h5, .h5 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  color: #000000;
+}
+
+/* Text Styles */
+.text-body {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.text-subtitle {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-body);
+}
+
+.text-small {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+}
+
+.text-label {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+
+/* Display Typography */
+.text-hero {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  color: #000000;
+}
+
+.text-gradient-blue {
+  background: var(--gradient-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gray {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ================================
+   Component Styles
+   ================================ */
+
+/* Card Styles */
+.card {
+  background: var(--color-bg-card);
+  border: 0.956px solid var(--color-border-primary);
+  border-radius: var(--radius-xl);
+  padding: 44.937px 38.244px;
+}
+
+.card-secondary {
+  background: var(--color-bg-secondary);
+  border: 1.5px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15.945px;
+  padding: 9.744px 31.004px 9.744px 31.004px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  border: 2.657px solid var(--color-border-light);
+}
+
+.btn-primary {
+  background: var(--gradient-gray);
+  color: white;
+}
+
+.btn-blue {
+  background: var(--gradient-blue);
+  border-color: var(--color-border-dark);
+  color: white;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46.949px;
+  height: 46.949px;
+  padding: 12.845px 12.402px 12.845px 13.287px;
+  background: white;
+  border-radius: var(--radius-full);
+}
+
+/* Tag Styles */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 12px 16px;
+  border-radius: 9999px;
+  border: 2px solid var(--color-border-medium);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.tag-active {
+  background: var(--gradient-blue);
+  color: var(--color-white-main);
+}
+
+.tag-inactive {
+  background: white;
+  color: #1e2939;
+}
+
+/* Badge Styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.139px 3.924px;
+  background: var(--color-blue);
+  border-radius: 8.047px;
+  color: var(--color-white-main);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Marquee/Ticker Styles */
+.ticker {
+  background: var(--color-bg-accent);
+  border: 1px solid var(--color-border-tertiary);
+  padding: 15px 50px;
+  font-weight: var(--font-weight-medium);
+  color: #000000;
+  white-space: nowrap;
+}
+
+/* Gradient Section */
+.gradient-section {
+  background: var(--gradient-blue);
+  border: 5px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tool Card */
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: var(--color-bg-secondary);
+  border: 1.5px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tool-icon {
+  width: 57.083px;
+  height: 57.083px;
+  border-radius: 2.854px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ================================
+   Utility Classes
+   ================================ */
+
+/* Blur Effects */
+.blur-sm {
+  filter: blur(7.5px);
+}
+
+.blur-md {
+  filter: blur(13.011px);
+}
+
+.blur-lg {
+  filter: blur(17.5px);
+}
+
+/* Shadow */
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+/* Transitions */
+.transition-fast {
+  transition: all var(--transition-fast);
+}
+
+.transition-normal {
+  transition: all var(--transition-normal);
+}
+
+.transition-slow {
+  transition: all var(--transition-slow);
+}

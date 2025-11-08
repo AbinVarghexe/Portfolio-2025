@@ -1,0 +1,52 @@
+// Prisma schema for Portfolio Website
+// Database: PostgreSQL (Neon serverless)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // For migrations on Neon
+}
+
+// Project model - stores portfolio projects
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  content     String   @db.Text // Full project details
+  imageUrl    String   // Thumbnail image
+  demoUrl     String?  // Live demo link
+  githubUrl   String?  // GitHub repository
+  tags        String[] // Tech stack tags
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([featured])
+  @@index([createdAt])
+}
+
+// Admin model - for admin authentication
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Hashed password
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Optional: User model for NextAuth (prepared but commented)
+// Uncomment when implementing authentication
+// model User {
+//   id            String    @id @default(cuid())
+//   name          String?
+//   email         String    @unique
+//   emailVerified DateTime?
+//   image         String?
+//   createdAt     DateTime  @default(now())
+//   updatedAt     DateTime  @updatedAt
+// }
