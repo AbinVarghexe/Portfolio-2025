@@ -1,4 +1,11 @@
+# *
 User-agent: *
 Allow: /
-Sitemap: https://abinvarghese.me/sitemap.xml
+Disallow: /admin
+Disallow: /api
 
+# Host
+Host: https://abinvarghese.me
+
+# Sitemaps
+Sitemap: https://abinvarghese.me/sitemap.xml
