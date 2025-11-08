@@ -307,3 +307,99 @@ MIT License - feel free to use this template for your own portfolio!
 ---
 
 **Built with ❤️ using Next.js 16, Prisma, and PostgreSQL**
+
+## Development
+
+### Site
+
+This repository includes a typed design system and Tailwind-based utilities that define the current site design styles. Use these patterns to keep UI consistent.
+
+• Fonts
+
+- Display: Vina
+- Sans: Poppins
+
+• Colors and Gradients (CSS variables)
+
+Refer to `src/styles/globals.css` for CSS variables like:
+
+```
+--color-primary, --color-blue, --color-indigo,
+--color-text-body, --color-text-secondary, --color-text-muted,
+--color-bg-main, --color-bg-card, --color-bg-secondary,
+--gradient-blue, --gradient-gray, --gradient-text
+```
+
+• Type-safe tokens and utilities
+
+- Tokens: `src/lib/design-system.ts` (colors, spacing, typography, radii, shadows)
+- Utilities: `src/lib/design-utils.ts` (headingClass, textClass, buttonClass, cardClass, tagClass, sectionClass, etc.)
+
+• Common patterns (examples)
+
+Headings and text:
+
+```tsx
+import { headingClass, textClass } from '@/lib/design-utils';
+
+<h1 className={headingClass('h1')}>My Creative Toolbox</h1>
+<p className={textClass('body')}>Body text</p>
+```
+
+Buttons:
+
+```tsx
+import { buttonClass } from '@/lib/design-utils';
+
+<button className={buttonClass('primary')}>Contact me</button>
+<button className={buttonClass('blue')}>Resume</button>
+```
+
+Cards and tags:
+
+```tsx
+import { cardClass, tagClass } from '@/lib/design-utils';
+
+<div className={cardClass('default')}>
+  <h3 className={headingClass('h3')}>Web Development</h3>
+  <p className={textClass('subtitle')}>Description…</p>
+</div>
+
+<button className={tagClass(true)}>Graphic Design</button>
+<button className={tagClass(false)}>Video Editing</button>
+```
+
+Gradient text and sections:
+
+```tsx
+import { gradientTextClass, gradientSectionClass } from '@/lib/design-utils';
+
+<h2 className={gradientTextClass('blue')}>Brands & Companies</h2>
+<section className={gradientSectionClass()}>
+  <p className="text-white/80">Content…</p>
+</section>
+```
+
+Layout helpers:
+
+```tsx
+import { sectionClass, spacingClass } from '@/lib/design-utils';
+
+<section className={sectionClass(spacingClass('py', 'xl'))}>
+  {/* content */}
+</section>
+```
+
+• Tailwind inline theme
+
+Tailwind tokens are mapped from CSS variables in `globals.css` via `@theme inline`. Prefer design tokens over ad-hoc colors (e.g., use text classes or utilities instead of arbitrary Tailwind color names).
+
+• UI components barrel
+
+Import ready-to-use UI components from `@/components/ui`:
+
+```ts
+import { Button, MouseTrail, RotatingText, Slidingbanner, SquaresBackground } from '@/components/ui';
+```
+
+For deeper guidance, see `DESIGN_SYSTEM.md`.

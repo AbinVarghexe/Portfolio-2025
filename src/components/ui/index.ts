@@ -8,3 +8,4 @@ export { default as MouseTrail } from './MouseTrail';
 export { default as RotatingText } from './RotatingText';
 export { default as Slidingbanner } from './Slidingbanner';
 export { default as SquaresBackground } from './SquaresBackground';
+export { default as SiteUnderDevelopment } from './SiteUnderDevelopment';
