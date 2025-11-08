@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import MouseTrail from "@/components/ui/MouseTrail";
 import { MobileNav } from "@/components/common/MobileNav";
 import { MobileDock } from "@/components/common/MobileDock";
+import { PersonSchema } from "@/seo/schema";
+import { metadata as seoMetadata } from "@/seo/metadata";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -20,10 +22,7 @@ const vina = localFont({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Your Name - Full-Stack Developer",
-  description: "Portfolio website showcasing projects and skills in web development",
-};
+export const metadata: Metadata = seoMetadata;
 
 export default function RootLayout({
   children,
@@ -35,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${vina.variable} antialiased`}
       >
+        <PersonSchema />
         <script
           dangerouslySetInnerHTML={{
             __html: `
