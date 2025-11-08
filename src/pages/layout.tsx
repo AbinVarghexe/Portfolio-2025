@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MouseTrail from "@/components/ui/MouseTrail";
 
-const poppins = Poppins({
-  weight: ['300', '400', '500', '600', '700'],
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-poppins",
 });
 
-const vina = localFont({
-  src: "../../public/fonts/vina.ttf",
-  variable: "--font-vina",
-  display: "swap",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -29,24 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
-        className={`${poppins.variable} ${vina.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
-          }}
-        />
         {/* WebGL mouse trail with custom Figma-like cursor */}
         <MouseTrail
+          colors={['#ffffff']}
           baseThickness={4}
           enableCustomCursor={true}
           enableFade={true}

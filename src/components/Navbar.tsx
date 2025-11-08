@@ -84,20 +84,23 @@ export default function Navbar() {
             y: 40,
             borderWidth: '1px',
             borderColor: isLightMode
-              ? 'rgba(255, 255, 255, 0.3)'
-              : 'rgba(255, 255, 255, 0.2)',
+              ? 'rgba(0, 0, 0, 0.1)'
+              : 'rgba(255, 255, 255, 0.1)',
           }}
           transition={{
             type: 'spring',
             stiffness: 260,
             damping: 30,
           }}
-          className="w-full pointer-events-auto shadow-lg"
+          className="w-full pointer-events-auto shadow-lg text-gray-900 dark:text-white"
           style={{
             borderStyle: 'solid',
-            backgroundColor: 'rgba(217, 217, 217, 0.3)',
+            backgroundColor: isLightMode 
+              ? 'rgba(236, 236, 236, 0.7)' 
+              : 'rgba(10, 10, 10, 0.7)',
             backdropFilter: 'blur(16px) saturate(180%)',
             WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+            color: isLightMode ? '#111827' : '#ffffff',
           }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-18 h-full">
@@ -105,9 +108,10 @@ export default function Navbar() {
               {/* Logo */}
               <Link
                 href="/"
-                className="relative text-xl md:text-2xl font-bold text-black hover:text-gray-800 transition-colors z-10"
+                className="relative text-xl md:text-2xl font-bold transition-colors z-10 hover:opacity-80"
+                style={{ color: isLightMode ? '#111827' : '#ffffff' }}
               >
-                <span className="text-black font-['Vina'] text-4xl">
+                <span className="font-['Vina'] text-4xl" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>
                   ABIN
                 </span>
               </Link>
@@ -118,11 +122,24 @@ export default function Navbar() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className={`relative text-[18px] font-regular transition-all duration-200 hover:text-gray-800 group ${
+                      className={`relative text-[18px] font-regular transition-all duration-200 group ${
                         pathname === link.href
-                          ? 'text-black font-semibold'
-                          : 'text-black'
+                          ? 'font-semibold'
+                          : ''
                       }`}
+                      style={{ 
+                        color: isLightMode ? '#111827' : '#ffffff',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (isLightMode) {
+                          e.currentTarget.style.color = '#374151';
+                        } else {
+                          e.currentTarget.style.color = '#d1d5db';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = isLightMode ? '#111827' : '#ffffff';
+                      }}
                     >
                       {link.label}
                       {/* Underline animation */}
@@ -136,14 +153,15 @@ export default function Navbar() {
                 {/* Theme Toggle Button */}
                 <button
                   onClick={toggleTheme}
-                  className="p-2 rounded-lg text-black hover:text-gray-800 hover:bg-gray-200 transition-all"
+                  className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
+                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
                   aria-label="Toggle theme"
                 >
                   {mounted && (
                     isLightMode ? (
-                      <Moon className="w-7 h-7" />
+                      <Moon className="w-7 h-7" style={{ color: '#111827' }} />
                     ) : (
-                      <Sun className="w-7 h-7" />
+                      <Sun className="w-7 h-7" style={{ color: '#ffffff' }} />
                     )
                   )}
                 </button>
@@ -151,13 +169,14 @@ export default function Navbar() {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="md:hidden relative z-10 p-2 text-black hover:text-gray-800 transition-colors"
+                  className="md:hidden relative z-10 p-2 transition-colors"
+                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
                   aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                 >
                   {isMenuOpen ? (
-                    <X className="w-6 h-6" />
+                    <X className="w-6 h-6" style={{ color: isLightMode ? '#111827' : '#ffffff' }} />
                   ) : (
-                    <Menu className="w-6 h-6" />
+                    <Menu className="w-6 h-6" style={{ color: isLightMode ? '#111827' : '#ffffff' }} />
                   )}
                 </button>
               </div>
@@ -178,9 +197,9 @@ export default function Navbar() {
 
       {/* Mobile Menu Slide-in Panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-white dark:bg-black z-40 md:hidden transition-transform duration-300 ease-in-out transform ${
+        className={`fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-[#ECECEC] dark:bg-[#0A0A0A] z-40 md:hidden transition-transform duration-300 ease-in-out transform ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        } border-l border-zinc-200 dark:border-zinc-800 shadow-2xl`}
+        } border-l border-gray-300 dark:border-gray-700 shadow-2xl`}
       >
         <div className="flex flex-col h-full pt-24 px-6">
           {/* Mobile Navigation Links */}
@@ -199,9 +218,10 @@ export default function Navbar() {
                   href={link.href}
                   className={`block py-4 px-4 rounded-lg text-base font-medium transition-all duration-200 ${
                     pathname === link.href
-                      ? 'bg-gray-200 text-black'
-                      : 'text-black hover:bg-gray-100'
+                      ? isLightMode ? 'bg-gray-300' : 'bg-gray-800'
+                      : isLightMode ? 'hover:bg-gray-200' : 'hover:bg-gray-800'
                   }`}
+                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
@@ -212,32 +232,35 @@ export default function Navbar() {
 
           {/* Mobile Menu Footer with Theme Toggle */}
           <div className="mt-auto pb-8">
-            <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
+            <div className="pt-6 border-t border-gray-300 dark:border-gray-700 space-y-4">
               {/* Theme Toggle in Mobile Menu */}
               <button
                 onClick={toggleTheme}
-                className="w-full flex items-center justify-between py-3 px-4 rounded-lg text-black hover:bg-gray-100 transition-all"
+                className={`w-full flex items-center justify-between py-3 px-4 rounded-lg transition-all ${
+                  isLightMode ? 'hover:bg-gray-200' : 'hover:bg-gray-800'
+                }`}
+                style={{ color: isLightMode ? '#111827' : '#ffffff' }}
                 aria-label="Toggle theme"
               >
-                <span className="text-sm font-medium">Theme</span>
+                <span className="text-sm font-medium" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>Theme</span>
                 <div className="flex items-center gap-2">
                   {mounted && (
                     isLightMode ? (
                       <>
-                        <span className="text-xs text-gray-600">Light</span>
-                        <Moon className="w-5 h-5" />
+                        <span className="text-xs" style={{ color: '#374151' }}>Light</span>
+                        <Moon className="w-5 h-5" style={{ color: '#111827' }} />
                       </>
                     ) : (
                       <>
-                        <span className="text-xs text-gray-600">Dark</span>
-                        <Sun className="w-5 h-5" />
+                        <span className="text-xs" style={{ color: '#9ca3af' }}>Dark</span>
+                        <Sun className="w-5 h-5" style={{ color: '#ffffff' }} />
                       </>
                     )
                   )}
                 </div>
               </button>
               
-              <p className="text-xs text-gray-600">
+              <p className="text-xs" style={{ color: isLightMode ? '#4b5563' : '#9ca3af' }}>
                 © 2024 Portfolio. All rights reserved.
               </p>
             </div>

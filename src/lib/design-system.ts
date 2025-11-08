@@ -27,7 +27,7 @@ export const colors = {
   
   // Background Colors
   background: {
-    main: '#ececec',
+    main: '#ECECEC',
     card: '#e1e1e1',
     secondary: '#e4e3e3',
     tertiary: '#d9d9d9',
