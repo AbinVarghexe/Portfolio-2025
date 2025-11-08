@@ -5,6 +5,8 @@ import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MouseTrail from "@/components/ui/MouseTrail";
+import { MobileNav } from "@/components/common/MobileNav";
+import { MobileDock } from "@/components/common/MobileDock";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -52,7 +54,9 @@ export default function RootLayout({
           enableFade={true}
         />
         <Navbar />
-        <div className="pt-16">{children}</div>
+        <MobileNav />
+        <MobileDock />
+        <div className="pt-16 pb-24 md:pb-16">{children}</div>
         <Footer />
       </body>
     </html>

@@ -373,3 +373,25 @@ h5, .h5 {
 .transition-slow {
   transition: all var(--transition-slow);
 }
+
+/* ================================
+   Mobile Navigation Styles
+   ================================ */
+
+.mobile-nav-bg {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .mobile-nav-bg {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-nav-logo {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dark .mobile-nav-logo {
+  color: #ffffff;
+}

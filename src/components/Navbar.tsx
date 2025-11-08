@@ -1,15 +1,15 @@
-// Navbar component - responsive navigation with floating effect
+// Navbar component - Desktop-only responsive navigation with floating effect
+// Mobile uses MobileNav (top) and MobileDock (bottom) components instead
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLightMode, setIsLightMode] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -53,27 +53,10 @@ export default function Navbar() {
     }
   };
 
-  // Close menu when route changes
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
-  // Prevent body scroll when menu is open
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMenuOpen]);
-
   return (
     <>
-      {/* Main Navbar Wrapper */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      {/* Main Navbar Wrapper - Hidden on mobile */}
+      <div className="fixed top-0 left-0 right-0 z-50 justify-center pointer-events-none hidden md:flex">
         <motion.nav
           initial={false}
           animate={{
@@ -81,7 +64,7 @@ export default function Navbar() {
             width: '75%',
             height: '80px',
             borderRadius: '60px',
-            y: 40,
+            y: 60,
             borderWidth: '1px',
             borderColor: isLightMode
               ? 'rgba(0, 0, 0, 0.1)'
@@ -148,9 +131,9 @@ export default function Navbar() {
                 ))}
               </ul>
 
-              {/* Right Section: Theme Toggle + Mobile Menu */}
+              {/* Right Section: Theme Toggle (Mobile menu removed - using MobileNav and MobileDock) */}
               <div className="flex items-center gap-2">
-                {/* Theme Toggle Button */}
+                {/* Theme Toggle Button - Desktop only (mobile uses MobileNav) */}
                 <button
                   onClick={toggleTheme}
                   className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
@@ -166,106 +149,11 @@ export default function Navbar() {
                   )}
                 </button>
 
-                {/* Mobile Menu Button */}
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="md:hidden relative z-10 p-2 transition-colors"
-                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
-                  aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-                >
-                  {isMenuOpen ? (
-                    <X className="w-6 h-6" style={{ color: isLightMode ? '#111827' : '#ffffff' }} />
-                  ) : (
-                    <Menu className="w-6 h-6" style={{ color: isLightMode ? '#111827' : '#ffffff' }} />
-                  )}
-                </button>
+                {/* Mobile Menu Button - Removed (using MobileNav and MobileDock instead) */}
               </div>
           </div>
           </div>
         </motion.nav>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300 ${
-          isMenuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={() => setIsMenuOpen(false)}
-      />
-
-      {/* Mobile Menu Slide-in Panel */}
-      <div
-        className={`fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-[#ECECEC] dark:bg-[#0A0A0A] z-40 md:hidden transition-transform duration-300 ease-in-out transform ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        } border-l border-gray-300 dark:border-gray-700 shadow-2xl`}
-      >
-        <div className="flex flex-col h-full pt-24 px-6">
-          {/* Mobile Navigation Links */}
-          <ul className="flex flex-col gap-2">
-            {navLinks.map((link, index) => (
-              <li
-                key={link.href}
-                className={`transform transition-all duration-300 ${
-                  isMenuOpen
-                    ? 'translate-x-0 opacity-100'
-                    : 'translate-x-8 opacity-0'
-                }`}
-                style={{ transitionDelay: `${index * 50}ms` }}
-              >
-                <Link
-                  href={link.href}
-                  className={`block py-4 px-4 rounded-lg text-base font-medium transition-all duration-200 ${
-                    pathname === link.href
-                      ? isLightMode ? 'bg-gray-300' : 'bg-gray-800'
-                      : isLightMode ? 'hover:bg-gray-200' : 'hover:bg-gray-800'
-                  }`}
-                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Mobile Menu Footer with Theme Toggle */}
-          <div className="mt-auto pb-8">
-            <div className="pt-6 border-t border-gray-300 dark:border-gray-700 space-y-4">
-              {/* Theme Toggle in Mobile Menu */}
-              <button
-                onClick={toggleTheme}
-                className={`w-full flex items-center justify-between py-3 px-4 rounded-lg transition-all ${
-                  isLightMode ? 'hover:bg-gray-200' : 'hover:bg-gray-800'
-                }`}
-                style={{ color: isLightMode ? '#111827' : '#ffffff' }}
-                aria-label="Toggle theme"
-              >
-                <span className="text-sm font-medium" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>Theme</span>
-                <div className="flex items-center gap-2">
-                  {mounted && (
-                    isLightMode ? (
-                      <>
-                        <span className="text-xs" style={{ color: '#374151' }}>Light</span>
-                        <Moon className="w-5 h-5" style={{ color: '#111827' }} />
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-xs" style={{ color: '#9ca3af' }}>Dark</span>
-                        <Sun className="w-5 h-5" style={{ color: '#ffffff' }} />
-                      </>
-                    )
-                  )}
-                </div>
-              </button>
-              
-              <p className="text-xs" style={{ color: isLightMode ? '#4b5563' : '#9ca3af' }}>
-                © 2024 Portfolio. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
