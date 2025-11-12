@@ -8,6 +8,81 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
 
+interface NavLinkProps {
+  href: string;
+  label: string;
+  isActive: boolean;
+  isLightMode: boolean;
+}
+
+function NavLink({ href, label, isActive, isLightMode }: NavLinkProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <li>
+      <Link
+        href={href}
+        className={`relative text-[18px] font-regular transition-all duration-200 group ${
+          isActive ? 'font-semibold' : ''
+        }`}
+        style={{ 
+          color: isLightMode ? '#111827' : '#ffffff',
+        }}
+        onMouseEnter={(e) => {
+          setIsHovered(true);
+          if (isLightMode) {
+            e.currentTarget.style.color = '#374151';
+          } else {
+            e.currentTarget.style.color = '#d1d5db';
+          }
+        }}
+        onMouseLeave={(e) => {
+          setIsHovered(false);
+          e.currentTarget.style.color = isLightMode ? '#111827' : '#ffffff';
+        }}
+      >
+        <motion.span
+          animate={{
+            scale: isHovered ? 1.1 : 1,
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 400,
+            damping: 17,
+          }}
+          className="inline-block"
+        >
+          {label}
+        </motion.span>
+        {/* Hover dot indicator - only shows on hover */}
+        {!isActive && (
+          <motion.span
+            className="absolute -bottom-1 left-1/2 w-1.5 h-1.5 rounded-full"
+            style={{
+              backgroundColor: isLightMode ? '#111827' : '#ffffff',
+            }}
+            initial={{ 
+              scale: 0,
+              x: '-50%',
+              opacity: 0,
+            }}
+            animate={{ 
+              scale: isHovered ? 1 : 0,
+              opacity: isHovered ? 1 : 0,
+              x: '-50%',
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 400,
+              damping: 17,
+            }}
+          />
+        )}
+      </Link>
+    </li>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const [isLightMode, setIsLightMode] = useState(false);
@@ -58,13 +133,18 @@ export default function Navbar() {
       {/* Main Navbar Wrapper - Desktop only */}
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
         <motion.nav
-          initial={false}
+          initial={{ 
+            opacity: 0,
+            y: -100,
+            scale: 0.9,
+          }}
           animate={{
+            opacity: 1,
+            y: 60,
             scale: 0.95,
             width: '75%',
             height: '80px',
             borderRadius: '60px',
-            y: 60,
             borderWidth: '1px',
             borderColor: isLightMode
               ? 'rgba(0, 0, 0, 0.1)'
@@ -74,6 +154,7 @@ export default function Navbar() {
             type: 'spring',
             stiffness: 260,
             damping: 30,
+            opacity: { duration: 0.5 },
           }}
           className="w-full pointer-events-auto shadow-lg text-gray-900 dark:text-white"
           style={{
@@ -101,34 +182,18 @@ export default function Navbar() {
 
               {/* Desktop Navigation Links - Centered */}
               <ul className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <NavLink
+                      key={link.href}
                       href={link.href}
-                      className={`relative text-[18px] font-regular transition-all duration-200 group ${
-                        pathname === link.href
-                          ? 'font-semibold'
-                          : ''
-                      }`}
-                      style={{ 
-                        color: isLightMode ? '#111827' : '#ffffff',
-                      }}
-                      onMouseEnter={(e) => {
-                        if (isLightMode) {
-                          e.currentTarget.style.color = '#374151';
-                        } else {
-                          e.currentTarget.style.color = '#d1d5db';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = isLightMode ? '#111827' : '#ffffff';
-                      }}
-                    >
-                      {link.label}
-                      {/* Underline animation */}
-                    </Link>
-                  </li>
-                ))}
+                      label={link.label}
+                      isActive={isActive}
+                      isLightMode={isLightMode}
+                    />
+                  );
+                })}
               </ul>
 
               {/* Right Section: Theme Toggle (Mobile menu removed - using MobileNav and MobileDock) */}
@@ -136,8 +201,21 @@ export default function Navbar() {
                 {/* Theme Toggle Button - Desktop only (mobile uses MobileNav) */}
                 <button
                   onClick={toggleTheme}
-                  className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
-                  style={{ color: isLightMode ? '#111827' : '#ffffff' }}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    color: isLightMode ? '#111827' : '#ffffff',
+                    backgroundColor: 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (isLightMode) {
+                      e.currentTarget.style.backgroundColor = 'rgba(229, 231, 235, 0.8)'; // light grey
+                    } else {
+                      e.currentTarget.style.backgroundColor = 'rgba(31, 41, 55, 0.8)'; // dark grey
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
                   aria-label="Toggle theme"
                 >
                   {mounted && (
