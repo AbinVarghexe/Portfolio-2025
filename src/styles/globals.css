@@ -222,6 +222,12 @@
    Typography Base Styles
    ================================ */
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  position: relative;
+}
+
 body {
   font-family: var(--font-sans);
   font-weight: var(--font-weight-regular);
@@ -229,6 +235,9 @@ body {
   color: var(--color-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
+  position: relative;
 }
 
 /* Heading Styles */
@@ -503,4 +512,15 @@ h5, .h5 {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Prevent horizontal scroll and ensure content stays within viewport */
+* {
+  box-sizing: border-box;
+}
+
+#__next,
+main {
+  overflow-x: hidden;
+  max-width: 100vw;
 }

@@ -8,7 +8,7 @@ import MouseTrail from "@/components/ui/MouseTrail";
 import { MobileNav } from "@/components/common/MobileNav";
 import { MobileDock } from "@/components/common/MobileDock";
 import { PersonSchema } from "@/seo/schema";
-import { metadata as seoMetadata } from "@/seo/metadata";
+import { metadata as seoMetadata, viewport } from "@/seo/metadata";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -23,6 +23,7 @@ const vina = localFont({
 });
 
 export const metadata: Metadata = seoMetadata;
+export { viewport };
 
 export default function RootLayout({
   children,
