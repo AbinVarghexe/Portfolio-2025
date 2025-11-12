@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion as m } from 'framer-motion';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { ThemeToggle } from '../common/Themetoggle';
 
 interface MobileNavProps {
@@ -10,6 +11,8 @@ interface MobileNavProps {
 
 export const MobileNav = ({ className = '' }: MobileNavProps) => {
   const [isLightMode, setIsLightMode] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
 
   // Check theme state
   useEffect(() => {
@@ -28,48 +31,64 @@ export const MobileNav = ({ className = '' }: MobileNavProps) => {
     return () => observer.disconnect();
   }, []);
 
-  // Create a reference to force usage of motion import
-  const MotionDiv = m.div;
+  // GSAP animations
+  useEffect(() => {
+    if (!containerRef.current || !logoRef.current) return;
+
+    // Set initial states
+    gsap.set(containerRef.current, {
+      y: -100,
+      opacity: 0,
+    });
+
+    gsap.set(logoRef.current, {
+      scale: 0,
+    });
+
+    // Animate container
+    gsap.to(containerRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      ease: 'back.out(1.7)',
+      delay: 0.2,
+    });
+
+    // Animate logo
+    gsap.to(logoRef.current, {
+      scale: 1,
+      duration: 0.6,
+      ease: 'back.out(1.7)',
+      delay: 0.4,
+    });
+  }, []);
+
+  // Update border and background colors when theme changes
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    gsap.to(containerRef.current, {
+      borderColor: isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: isLightMode ? 'rgba(236, 236, 236, 0.7)' : 'rgba(10, 10, 10, 0.7)',
+      duration: 0.3,
+      ease: 'power2.inOut',
+    });
+  }, [isLightMode]);
 
   return (
-    <div className={`fixed top-10 left-1/2 transform -translate-x-1/2 z-50 md:hidden ${className}`}>
-      <MotionDiv
-        className="flex items-center justify-between gap-6 px-6! py-3! rounded-full shadow-lg min-w-[300px]"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ 
-          y: 0, 
-          opacity: 1,
-          borderWidth: '1px',
-          borderColor: isLightMode
-            ? 'rgba(0, 0, 0, 0.1)'
-            : 'rgba(255, 255, 255, 0.1)',
-        }}
-        transition={{ 
-          type: 'spring', 
-          stiffness: 400, 
-          damping: 25,
-          delay: 0.2 
-        }}
+    <div className={`fixed top-10 left-1/2 transform -translate-x-1/2 z-50 ${className}`}>
+      <div
+        ref={containerRef}
+        className="flex items-center justify-between gap-6 px-6! py-3! rounded-full shadow-lg min-w-[350px] border"
         style={{
-          borderStyle: 'solid',
-          backgroundColor: isLightMode 
-            ? 'rgba(236, 236, 236, 0.7)' 
-            : 'rgba(10, 10, 10, 0.7)',
           backdropFilter: 'blur(16px) saturate(180%)',
           WebkitBackdropFilter: 'blur(16px) saturate(180%)',
         }}
       >
         {/* Logo */}
-        <MotionDiv
+        <div
+          ref={logoRef}
           className="flex items-center"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ 
-            type: 'spring', 
-            stiffness: 400, 
-            damping: 25,
-            delay: 0.4 
-          }}
         >
           <span 
             className="font-bold text-2xl font-['Vina'] tracking-wide"
@@ -77,11 +96,11 @@ export const MobileNav = ({ className = '' }: MobileNavProps) => {
           >
             ABIN
           </span>
-        </MotionDiv>
+        </div>
 
         {/* Theme Toggle Button */}
         <ThemeToggle className="p-2!" />
-      </MotionDiv>
+      </div>
     </div>
   );
 };

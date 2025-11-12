@@ -53,9 +53,15 @@ export default function RootLayout({
           enableCustomCursor={true}
           enableFade={true}
         />
-        <Navbar />
-        <MobileNav />
-        <MobileDock />
+        {/* Desktop Navigation - Hidden on mobile (< md breakpoint) */}
+        <div className="hidden md:block">
+          <Navbar />
+        </div>
+        {/* Mobile Navigation - Hidden on desktop (>= md breakpoint) */}
+        <div className="block md:hidden">
+          <MobileNav />
+          <MobileDock />
+        </div>
         <div className="pt-16 pb-24 md:pb-16">{children}</div>
         <Footer />
       </body>

@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Copyright */}
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            © {currentYear} Your Name. All rights reserved.
+            © {currentYear} Abin Varghese. All rights reserved.
           </p>
 
           {/* Social Links */}

@@ -6,6 +6,8 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SquaresBackground from './ui/SquaresBackground';
 import RotatingText from './ui/RotatingText';
+import ScrollingBanner from './ui/ScrollingBanner';
+import TextPressure from './ui/TextPressure';
 
 const Herosection = () => {
   // Add state to determine light/dark mode preference on client
@@ -42,7 +44,7 @@ const Herosection = () => {
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4 py-20 md:py-32 max-w-4xl">
         <div className="flex flex-col items-center text-center">
-          {/* Main Heading - ABIN */}
+          {/* Main Heading - ABIN with TextPressure Effect */}
           <div className="relative mb-1">
             <h1 
               className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-none"
@@ -51,11 +53,17 @@ const Herosection = () => {
                 color: isLightMode ? '#111827' : '#ffffff'
               }}
             >
-              ABIN
+              <TextPressure 
+                text="ABIN" 
+                maxScale={1.4}
+                minScale={1}
+                radius={120}
+                strength={0.8}
+              />
             </h1>
           </div>
 
-          {/* Main Heading - VARGHESE */}
+          {/* Main Heading - VARGHESE with TextPressure Effect */}
           <div className="relative mb-12">
             <h1 
               className="text-6xl md:text-7xl lg:text-8xl xl:text-8xl leading-none"
@@ -64,7 +72,13 @@ const Herosection = () => {
                 color: isLightMode ? '#111827' : '#ffffff'
               }}
             >
-              VARGHESE
+              <TextPressure 
+                text="VARGHESE" 
+                maxScale={1.4}
+                minScale={1}
+                radius={120}
+                strength={0.8}
+              />
             </h1>
           </div>
 
@@ -73,7 +87,7 @@ const Herosection = () => {
             {/* fixed Tailwind typo and use isLightMode defined above */}
             <span className="font-medium" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>I'm a</span>
             <motion.span 
-              className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-[#0020d7] text-white overflow-hidden"
+              className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#0020d7] text-white overflow-hidden"
               layout
               transition={{ 
                 layout: { 
@@ -132,6 +146,7 @@ const Herosection = () => {
           </div>
         </div>
       </div>
+
     </section>
   );
 };

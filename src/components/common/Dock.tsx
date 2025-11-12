@@ -46,7 +46,7 @@ export const Dock: React.FC<DockProps> = ({ items = [], className = '' }) => {
   const MotionDiv = m.div;
 
   return (
-    <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 md:hidden ${className}`}>
+    <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 ${className}`}>
       <MotionDiv
         className="flex items-center justify-center gap-4 px-6! py-3! rounded-lg shadow-lg p-4!"
         initial={{ 
