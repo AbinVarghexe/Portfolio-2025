@@ -6,6 +6,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SquaresBackground from './ui/SquaresBackground';
 import RotatingText from './ui/RotatingText';
+import ScrollingBanner from './ui/ScrollingBanner';
 
 const Herosection = () => {
   // Add state to determine light/dark mode preference on client
@@ -132,6 +133,7 @@ const Herosection = () => {
           </div>
         </div>
       </div>
+
     </section>
   );
 };
