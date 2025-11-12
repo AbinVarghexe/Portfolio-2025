@@ -66,9 +66,11 @@ export const ScrollingBanner = ({
     const topWidth = topContent.scrollWidth / 4;
     const bottomWidth = bottomContent.scrollWidth / 4;
 
-    // Set initial positions and rotation (fixed rotation)
-    gsap.set(topBanner, { rotation: 8 });
-    gsap.set(bottomBanner, { rotation: -8 });
+    // Set initial positions and rotation (responsive rotation - only change for mobile)
+    const isMobile = window.innerWidth < 768;
+    const rotationAngle = isMobile ? 15 : 8; // Keep 8deg for desktop, 15deg for mobile
+    gsap.set(topBanner, { rotation: rotationAngle });
+    gsap.set(bottomBanner, { rotation: -rotationAngle });
 
     // Text scroll triggered by scroll - Top content moves left with infinite loop
     gsap.to(topContent, {
@@ -101,8 +103,19 @@ export const ScrollingBanner = ({
       }
     );
 
+    // Handle window resize to update rotation
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      const rotationAngle = isMobile ? 15 : 8;
+      gsap.set(topBanner, { rotation: rotationAngle });
+      gsap.set(bottomBanner, { rotation: -rotationAngle });
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      window.removeEventListener('resize', handleResize);
     };
   }, [items, speed]);
 
@@ -112,10 +125,9 @@ export const ScrollingBanner = ({
   return (
     <div    
       ref={bannerRef}
-      className={`absolute top-1/2 left-0 right-0 w-full pointer-events-none ${className}`}
+      className={`absolute top-1/2 left-0 right-0 w-full pointer-events-none h-[120px] md:h-[200px] ${className}`}
       style={{
         zIndex: 40,
-        height: '200px',
         transform: 'translateY(-50%)',
       }}
     >
@@ -124,7 +136,7 @@ export const ScrollingBanner = ({
         ref={topBannerRef}
         className="absolute top-1/2 left-1/2 w-[150%] overflow-hidden backdrop-blur-md shadow-lg"
         style={{
-          transform: 'translate(-50%, -50%) rotateZ(8deg)',
+          transform: 'translate(-50%, -50%)',
           transformOrigin: 'center center',
           backgroundColor: isLightMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
           borderTop: `1px solid ${isLightMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
@@ -133,11 +145,11 @@ export const ScrollingBanner = ({
       >
         <div
           ref={topContentRef}
-          className="inline-flex items-center px-8 py-4 font-medium text-2xl whitespace-nowrap will-change-transform"
+          className="inline-flex items-center px-4 py-2 md:px-8 md:py-4 font-medium text-base md:text-2xl whitespace-nowrap will-change-transform"
         >
           {duplicatedItems.map((item, index) => (
-            <span key={`top-${index}`} className="inline-flex items-center mx-8" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>
-              <span className="text-3xl mx-4" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>✦</span>
+            <span key={`top-${index}`} className="inline-flex items-center mx-2 md:mx-8" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>
+              <span className="text-lg md:text-3xl mx-2 md:mx-4" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>✦</span>
               {item}
             </span>
           ))}
@@ -149,7 +161,7 @@ export const ScrollingBanner = ({
         ref={bottomBannerRef}
         className="absolute top-1/2 left-1/2 w-[150%] overflow-hidden backdrop-blur-md shadow-lg"
         style={{
-          transform: 'translate(-50%, -50%) rotateZ(-8deg)',
+          transform: 'translate(-50%, -50%)',
           transformOrigin: 'center center',
           backgroundColor: isLightMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
           borderTop: `1px solid ${isLightMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
@@ -158,12 +170,12 @@ export const ScrollingBanner = ({
       >
         <div
           ref={bottomContentRef}
-          className="inline-flex items-center px-8 py-4 font-medium text-2xl whitespace-nowrap will-change-transform"
+          className="inline-flex items-center px-4 py-2 md:px-8 md:py-4 font-medium text-base md:text-2xl whitespace-nowrap will-change-transform"
           style={{ color: isLightMode ? '#111827' : '#ffffff' }}
         >
           {duplicatedItems.map((item, index) => (
-            <span key={`bottom-${index}`} className="inline-flex items-center mx-8" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>
-              <span className="text-3xl mx-4" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>✦</span>
+            <span key={`bottom-${index}`} className="inline-flex items-center mx-2 md:mx-8" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>
+              <span className="text-lg md:text-3xl mx-2 md:mx-4" style={{ color: isLightMode ? '#111827' : '#ffffff' }}>✦</span>
               {item}
             </span>
           ))}
